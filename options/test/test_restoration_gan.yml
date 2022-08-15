@@ -1,0 +1,142 @@
+name: test_stage3_swin_gan_lpips_Sun80_Urban100_Manga109
+suffix: ~  # add suffix to saved images
+scale: 4
+model_type: RefRestorationModel # TODO cpu: CPURefRestorationModel, gpu: RefRestorationModel
+set_CUDA_VISIBLE_DEVICES: ~
+crop_border: ~  # crop border when evaluation. If None(~), crop the scale pixels
+gpu_ids: [0]
+
+datasets:
+
+  # test_0:
+  #   name: multi_CUFED
+  #   type: MultiRefCUFEDDataset
+  #   dataroot_in: /scratch/228734291.tmpdir/cluster/work/cvl/jiezcao/data/CUFED/test/CUFED5
+  #   dataroot_ref: /scratch/228734291.tmpdir/cluster/work/cvl/jiezcao/data/CUFED/test/CUFED5
+  #   io_backend:
+  #     type: disk
+  #   bicubic_model: PIL
+  #   ann_file: ./datasets/CUFED5_pairs.txt
+  #   level: 5
+
+  test_0:
+    name: val_CUFED
+    type: RefCUFEDDataset
+    dataroot_in: /scratch/228734291.tmpdir/cluster/work/cvl/jiezcao/data/CUFED/test/CUFED5
+    dataroot_ref: /scratch/228734291.tmpdir/cluster/work/cvl/jiezcao/data/CUFED/test/CUFED5
+    io_backend:
+      type: disk
+    bicubic_model: PIL
+    ann_file: ./datasets/CUFED5_pairs.txt
+  #   # use_ColorJitter: true
+
+  # test_1:
+  #   name: Sun80
+  #   type: RefSISRDataset
+  #   dataroot_in: '/cluster/work/cvl/jiezcao/data/RefSR/Sun80/HR'
+  #   dataroot_ref: '/cluster/work/cvl/jiezcao/data/RefSR/Sun80/random_Ref'
+  #   io_backend:
+  #     type: disk
+  #   bicubic_model: PIL
+  # test_1:
+  #   name: multi_Sun80
+  #   type: MultiRefCUFEDDataset
+  #   dataroot_in: '/cluster/work/cvl/jiezcao/data/RefSR/Sun80/multi_Ref/'
+  #   dataroot_ref: '/cluster/work/cvl/jiezcao/data/RefSR/Sun80/multi_Ref/'
+  #   io_backend:
+  #     type: disk
+  #   bicubic_model: PIL
+  #   ann_file: ./datasets/multiSun80_pairs1.txt
+  #   level: 2
+
+  # test_1:
+  #   name: multi_Sun80_1
+  #   type: MultiRefDataset #MultiRefCUFEDDataset
+  #   dataroot_in: '/cluster/work/cvl/jiezcao/data/RefSR/Sun80/HR_subset1'
+  #   dataroot_ref: '/cluster/work/cvl/jiezcao/data/RefSR/Sun80/all_Ref_subset1'
+  #   io_backend:
+  #     type: disk
+  #   bicubic_model: PIL
+  #   # ann_file: ./datasets/multiSun80_pairs1.txt
+  #   level: 3
+
+  # test_1:
+  #   name: multi_Sun80_2
+  #   type: MultiRefDataset
+  #   dataroot_in: '/cluster/work/cvl/jiezcao/data/RefSR/Sun80/HR_subset2'
+  #   dataroot_ref: '/cluster/work/cvl/jiezcao/data/RefSR/Sun80/all_Ref_subset2'
+  #   io_backend:
+  #     type: disk
+  #   bicubic_model: PIL
+  #   level: 3
+
+  # test_2:
+  #   name: Urban100  #Urban100pretrain  #
+  #   type: RefSISRDataset
+  #   dataroot_in: '/cluster/work/cvl/jiezcao/data/RefSR/Urban100/HR'
+  #   dataroot_ref: '/cluster/work/cvl/jiezcao/data/RefSR/Urban100/HR' #pretrain_Ref'
+  #   io_backend:
+  #     type: disk
+  #   bicubic_model: PIL
+
+  # test_3:
+  #   name: Manga109 #Manga109pretrain  #
+  #   type: RefSISRDataset
+  #   dataroot_in: '/cluster/work/cvl/jiezcao/data/RefSR/Manga109/HR'
+  #   dataroot_ref: '/cluster/work/cvl/jiezcao/data/RefSR/Manga109/HR' #pretrain_Ref'  #
+  #   io_backend:
+  #     type: disk
+
+  # test_4:
+  #   name: WR-SR
+  #   type: RefSISRDataset
+  #   dataroot_in: /cluster/work/cvl/jiezcao/data/RefSR/WR-SR/input/
+  #   dataroot_ref: /cluster/work/cvl/jiezcao/data/RefSR/WR-SR/ref/
+  #   io_backend:
+  #     type: disk
+  #   bicubic_model: PIL
+  #   ann_file: ./datasets/WR-SR_pairs.txt
+  #   H_MAX: 1000 #1200
+  #   W_MAX: 1000 #1200
+
+  # test_5:
+  #   name: DIY
+  #   type: RefCUFEDDataset #  MultiRefCUFEDDataset #
+  #   dataroot_in: /cluster/work/cvl/jiezcao/data/RefSR/DIY/
+  #   dataroot_ref: /cluster/work/cvl/jiezcao/data/RefSR/DIY/
+  #   io_backend:
+  #     type: disk
+  #   bicubic_model: PIL
+  #   ann_file: ./datasets/diy_pairs.txt
+  # #   level: 2
+
+
+val_func: BasicSRValidation
+save_img: false # true #
+
+#### network structures
+network_g:
+  type: SwinUnetv3RestorationNet  #  CPUSwinUnetv3RestorationNet # TODO
+  ngf: 128
+  n_blocks: 8
+  groups: 8
+  embed_dim: 128
+  depths: [4, 4]
+  num_heads: [4, 4]
+  window_size: 8
+  use_checkpoint: True
+network_map:
+  type: FlowSimCorrespondenceGenerationArch
+  patch_size: 3
+  stride: 1
+  vgg_layer_list: ['relu1_1', 'relu2_1', 'relu3_1']
+  vgg_type: 'vgg19'
+network_extractor:
+  type: ContrasExtractorSep
+
+#### path
+path:
+  pretrain_model_g: /cluster/work/cvl/jiezcao/experiments/C2_matching/stage3_swin_depth2x4_dim128_unetv3_c2matching_restoration_gan/models/net_g_395000.pth  #net_g_275000.pth  #
+  pretrain_model_feature_extractor: /cluster/work/cvl/jiezcao/pretrained_model/C2_matching/feature_extraction.pth
+  strict_load: true
+  root: experiments/test/

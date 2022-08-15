@@ -1,0 +1,13 @@
+.eggs/
+.flake8
+.isort.cfg
+.pre-commit-config.yaml
+.style.yapf
+tb_logger/
+results/
+datsr.egg-info/
+.vscode/
+build/
+*.pyc
+*.pth
+experiments/

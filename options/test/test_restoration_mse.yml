@@ -1,0 +1,51 @@
+name: test_restoration_mse
+suffix: ~  # add suffix to saved images
+scale: 4
+model_type: RefRestorationModel
+set_CUDA_VISIBLE_DEVICES: ~
+crop_border: ~  # crop border when evaluation. If None(~), crop the scale pixels
+gpu_ids: [0]
+
+datasets:
+
+  test_0:
+    name: val_CUFED
+    type: RefCUFEDDataset
+    dataroot_in: data/CUFED/test/CUFED5
+    dataroot_ref: data/CUFED/test/CUFED5
+    io_backend:
+      type: disk
+    bicubic_model: PIL
+    ann_file: ./datasets/CUFED5_pairs.txt
+  # use_ColorJitter: true
+
+
+val_func: BasicSRValidation
+save_img:  false # true #
+
+#### network structures
+network_g:
+  type: SwinUnetv3RestorationNet 
+  ngf: 128
+  n_blocks: 8
+  groups: 8
+  embed_dim: 128
+  depths: [4, 4]
+  num_heads: [4, 4]
+  window_size: 8
+  use_checkpoint: True
+network_map:
+  type: FlowSimCorrespondenceGenerationArch
+  patch_size: 3
+  stride: 1
+  vgg_layer_list: ['relu1_1', 'relu2_1', 'relu3_1']
+  vgg_type: 'vgg19'
+network_extractor:
+  type: ContrasExtractorSep
+
+#### path
+path:
+  pretrain_model_g: experiments/pretrained_model/restoration_mse.pth
+  pretrain_model_feature_extractor: experiments/pretrained_model.pth
+  strict_load: true
+  root: experiments/test/
