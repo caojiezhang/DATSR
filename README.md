@@ -84,7 +84,7 @@ We provide quick test code with the pretrained model.
 PYTHONPATH="./:${PYTHONPATH}" python datsr/test.py -opt "options/test/test_restoration_mse.yml"
 
 # Run test code for models trained using **GAN loss**.
-    PYTHONPATH="./:${PYTHONPATH}" python datsr/test.py -opt "options/test/test_restoration.yml"
+PYTHONPATH="./:${PYTHONPATH}" python datsr/test.py -opt "options/test/test_restoration.yml"
 ```
 
 ## Training
