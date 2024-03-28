@@ -17,7 +17,7 @@ Computer Vision Lab, ETH Zurich.
 [![arXiv](https://img.shields.io/badge/arXiv-Paper-<COLOR>.svg)](https://arxiv.org/abs/2207.11938)
 [![GitHub Stars](https://img.shields.io/github/stars/caojiezhang/DATSR?style=social)](https://github.com/caojiezhang/DATSR)
 [![download](https://img.shields.io/github/downloads/caojiezhang/DATSR/total.svg)](https://github.com/caojiezhang/DATSR/releases)
-![visitors](https://visitor-badge.glitch.me/badge?page_id=caojiezhang/DATSR)
+![visitors](https://visitor-badge.laobi.icu/badge?page_id=caojiezhang/DATSR)
 
 This repository is the official PyTorch implementation of "Reference-based Image Super-Resolution with Deformable Attention Transformer"
 ([arxiv](https://arxiv.org/abs/2207.11938), [supp](https://github.com/caojiezhang/DATSR/releases/download/v0.0/supplementary.pdf), [pretrained models](https://github.com/caojiezhang/DATSR/releases), [visual results](https://github.com/caojiezhang/DATSR/releases)). 
